@@ -50,6 +50,7 @@ TEXT\s+OF\s+SELECT                           	yytext = 'TEXT';return 'SELECT'
 'ABSOLUTE'                                 		return 'ABSOLUTE'
 'ACTION'                                      	return 'ACTION'
 'ADD'                                      		return 'ADD'
+'ADDDATE'                                       return 'DATE_ADD'
 'AFTER'                                      	return 'AFTER'
 'AGGR'                                     		return 'AGGR'
 'AGGREGATE'                                     return 'AGGREGATE'
@@ -104,11 +105,19 @@ COLUMNS 										return 'COLUMN'
 "CROSS"											return 'CROSS'
 'CUBE'											return 'CUBE'
 "CURRENT_TIMESTAMP"								return 'CURRENT_TIMESTAMP'
+'NOW'											return 'NOW'
+'GETDATE'										return 'NOW'
 "CURSOR"										return 'CURSOR'
 DATABASE(S)?									return 'DATABASE'
+'DAY'											return 'DAY'
+'DAYOFMONTH'									return 'DAY'
+'DATE'											return 'DATE'
 'DATEADD'                                       return 'DATEADD'
 'DATEDIFF'                                      return 'DATEDIFF'
-'TIMESTAMPDIFF'                                      return 'TIMESTAMPDIFF'
+'DAYOFWEEK'										return 'DAYOFWEEK'
+'DATE_ADD'                                      return 'DATE_ADD'
+'DATE_SUB'                                      return 'DATE_SUB'
+'TIMESTAMPDIFF'                                 return 'TIMESTAMPDIFF'
 'DECLARE'                                       return 'DECLARE'
 'DEFAULT'                                       return 'DEFAULT'
 'DELETE'                                        return 'DELETE'
@@ -116,7 +125,7 @@ DATABASE(S)?									return 'DATABASE'
 'DESC'                                          return 'DIRECTION'
 'DETACH'										return 'DETACH'
 'DISTINCT'                                      return 'DISTINCT'
-/* DOUBLE\s+PRECISION								return 'LITERAL' */
+/* DOUBLE\s+PRECISION							return 'LITERAL' */
 'DROP'											return 'DROP'
 'ECHO'											return 'ECHO'
 'EDGE'											return 'EDGE'
@@ -143,7 +152,8 @@ DATABASE(S)?									return 'DATABASE'
 'GROUP'                                      	return 'GROUP'
 'GROUPING'                                     	return 'GROUPING'
 'HAVING'                                        return 'HAVING'
-/*'HELP'											return 'HELP'*/
+'HOUR'											return 'HOUR'
+/*'HELP'										return 'HELP'*/
 'IF'											return 'IF'
 'IDENTITY'										return 'IDENTITY'
 'IS'											return 'IS'
@@ -176,7 +186,9 @@ DATABASE(S)?									return 'DATABASE'
 
 "MERGE"											return 'MERGE'
 "MINUS"											return 'EXCEPT'
+"MINUTE"										return 'MINUTE'
 "MODIFY"										return 'MODIFY'
+'MONTH'											return 'MONTH'
 'NATURAL'										return 'NATURAL'
 'NEXT'											return 'NEXT'
 'NEW'											return 'NEW'
@@ -227,6 +239,7 @@ DATABASE(S)?									return 'DATABASE'
 'ROWS'											return 'ROWS'
 SCHEMA(S)?                                      return 'DATABASE'
 'SEARCH'                                        return 'SEARCH'
+'SECOND'										return 'SECOND'
 
 'SEMI'                                        	return 'SEMI'
 SET 	                                       	return 'SET'
@@ -236,6 +249,7 @@ SETS                                        	return 'SET'
 'SOURCE'										return 'SOURCE'
 'STRATEGY'										return 'STRATEGY'
 'STORE'                                        	return 'STORE'
+'SUBDATE'                                       return 'DATE_SUB'
 'SUM'											return 'SUM'
 'TOTAL'											return 'TOTAL'
 'TABLE'											return 'TABLE'
@@ -268,7 +282,9 @@ SETS                                        	return 'SET'
 'WHERE'                                         return 'WHERE'
 'WHILE'                                         return 'WHILE'
 'WITH'                                          return 'WITH'
+'WEEKDAY'										return 'DAYOFWEEK'
 'WORK'                                          return 'TRANSACTION'  /* Is this keyword required? */
+'YEAR'											return 'YEAR'
 
 (\d*[.])?\d+[eE]\d+								return 'NUMBER'
 (\d*[.])?\d+									return 'NUMBER'
@@ -1395,10 +1411,32 @@ FuncValue
 		{ $$ = new yy.FuncValue({ funcid: 'DATEDIFF', args:[new yy.StringValue({value:$3}),$5,$7]}) }
 	| DATEDIFF LPAR STRING COMMA Expression COMMA Expression RPAR
 		{ $$ = new yy.FuncValue({ funcid: 'DATEDIFF', args:[$3,$5,$7]}) }
+	| DATE LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'DATE', args:$3}) }
+	| DATE_ADD LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'DATE_ADD', args:$3}) }
+	| DATE_SUB LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'DATE_SUB', args:$3}) }
+	| DAY LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'DAY', args:$3 }) }
+	| DAYOFWEEK LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'DAYOFWEEK', args:$3 }) }
+	| HOUR LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'HOUR', args:$3 }) }
+	| MINUTE LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'MINUTE', args:$3 }) }
+	| MONTH LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'MONTH', args:$3 }) }
+	| NOW LPAR RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'NOW' }) }
+	| SECOND LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'SECOND', args:$3 }) }
 	| TIMESTAMPDIFF LPAR Expression COMMA Expression COMMA Expression RPAR
 		{ $$ = new yy.FuncValue({ funcid: 'TIMESTAMPDIFF', args:[new yy.StringValue({value:$3}),$5,$7]}) }
 	| INTERVAL Expression Literal
 		{ $$ = new yy.FuncValue({ funcid: 'INTERVAL', args:[$2,new yy.StringValue({value:($3).toLowerCase()})]}); }
+	| YEAR LPAR ExprList RPAR
+		{ $$ = new yy.FuncValue({ funcid: 'YEAR', args:$3 }) }
 	;
 
 ExprList
