@@ -47,7 +47,7 @@ describe('Test 408 - DATEADD() and DATEDIFF()', function () {
       DECLARE @enddate datetime = '2007-05-04 12:10:09.3312722';
     */
 		});
-		var res = alasql('VALUE OF SELECT DATEDIFF(day, @startdate, @enddate)');
+		var res = alasql('VALUE OF SELECT DATEDIFF(\'day\', @startdate, @enddate)');
 		assert.deepEqual(res, -1);
 
 		done();
@@ -57,27 +57,27 @@ describe('Test 408 - DATEADD() and DATEDIFF()', function () {
 		alasql("DECLARE @datetime2 datetime2 = '2020-01-01 13:10:10.1111111 UTC'");
 
 		var res = alasql(`MATRIX OF
-			SELECT 'year', DATEADD(year,1,@datetime2).toISOString()
+			SELECT 'year', DATEADD('year',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'quarter',DATEADD(quarter,1,@datetime2).toISOString()
+			SELECT 'quarter',DATEADD('quarter',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'month',DATEADD(month,1,@datetime2).toISOString()
+			SELECT 'month',DATEADD('month',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'dayofyear',DATEADD(dayofyear,1,@datetime2).toISOString()
+			SELECT 'dayofyear',DATEADD('dayofyear',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'day',DATEADD(day,1,@datetime2).toISOString()
+			SELECT 'day',DATEADD('day',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'week',DATEADD(week,1,@datetime2).toISOString()
+			SELECT 'week',DATEADD('week',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'weekday',DATEADD(weekday,1,@datetime2).toISOString()
+			SELECT 'weekday',DATEADD('weekday',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'hour',DATEADD(hour,1,@datetime2).toISOString()
+			SELECT 'hour',DATEADD('hour',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'minute',DATEADD(minute,1,@datetime2).toISOString()
+			SELECT 'minute',DATEADD('minute',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'second',DATEADD(second,1,@datetime2).toISOString()
+			SELECT 'second',DATEADD('second',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'millisecond',DATEADD(millisecond,1,@datetime2).toISOString()`);
+			SELECT 'millisecond',DATEADD('millisecond',1,@datetime2).toISOString()`);
 
 		var expected = [
 			['year', '2021-01-01T13:10:10.111Z'],
@@ -102,27 +102,27 @@ describe('Test 408 - DATEADD() and DATEDIFF()', function () {
 		alasql("DECLARE @datetime2 datetime2 = '2020.01.01 13:10:10.1111111 UTC'");
 
 		var res = alasql(`MATRIX OF
-			SELECT 'year', DATEADD(year,1,@datetime2).toISOString()
+			SELECT 'year', DATEADD('year',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'quarter',DATEADD(quarter,1,@datetime2).toISOString()
+			SELECT 'quarter',DATEADD('quarter',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'month',DATEADD(month,1,@datetime2).toISOString()
+			SELECT 'month',DATEADD('month',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'dayofyear',DATEADD(dayofyear,1,@datetime2).toISOString()
+			SELECT 'dayofyear',DATEADD('dayofyear',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'day',DATEADD(day,1,@datetime2).toISOString()
+			SELECT 'day',DATEADD('day',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'week',DATEADD(week,1,@datetime2).toISOString()
+			SELECT 'week',DATEADD('week',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'weekday',DATEADD(weekday,1,@datetime2).toISOString()
+			SELECT 'weekday',DATEADD('weekday',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'hour',DATEADD(hour,1,@datetime2).toISOString()
+			SELECT 'hour',DATEADD('hour',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'minute',DATEADD(minute,1,@datetime2).toISOString()
+			SELECT 'minute',DATEADD('minute',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'second',DATEADD(second,1,@datetime2).toISOString()
+			SELECT 'second',DATEADD('second',1,@datetime2).toISOString()
 			UNION ALL
-			SELECT 'millisecond',DATEADD(millisecond,1,@datetime2).toISOString()`);
+			SELECT 'millisecond',DATEADD('millisecond',1,@datetime2).toISOString()`);
 
 		var expected = [
 			['year', '2021-01-01T13:10:10.111Z'],

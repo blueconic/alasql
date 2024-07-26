@@ -18,7 +18,7 @@ if (typeof exports === 'object') {
 	});
 
 	it('1. stores date and retrieves date correctly', function (done) {
-		alasql('CREATE TABLE dates (date datetime)');
+		alasql('CREATE TABLE dates (`date` datetime)');
 		alasql('INSERT INTO dates (?)', [now]);
 		alasql('INSERT INTO dates (?)', [unixepoch]);
 
